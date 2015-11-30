@@ -13,15 +13,13 @@ public class Mech {
     private ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
     private int centerX = 100;
     private int centerY = 377;
+    public int health = 5;
+
     private boolean jumped = false;
     private boolean movingLeft = false;
     private boolean movingRight = false;
     private boolean ducked = false;
     private boolean readyToFire = true;
-
-    private static Background bg1 = StartingClass.getBg1();
-    private static Background bg2 = StartingClass.getBg2();
-
 
     private int speedX = 0;
     private int speedY = 0;
@@ -37,22 +35,29 @@ public class Mech {
 
 
     public void update() {
+        Background bg1 = StartingClass.getBg1();  // it was defined as public static [bg1.setSpeedX(),bg2.setSpeedX()] wasn't allowed for usage when update method was called ()
+        Background bg2 = StartingClass.getBg2();
+
 
         //movement of character and scrolling of the background
         if (speedX < 0) {
             centerX += speedX;
 
         }
+        // background to stop moving if robot stops or moves left
         if (speedX == 0 || speedX < 0) {
 
             bg1.setSpeedX(0);
             bg2.setSpeedX(0);
 
+
         }
+        //movement for robot to max of 200 right from centerX
         if (centerX <= 200 && speedX > 0) {
 
             centerX += speedX;
         }
+
         if (speedX > 0 && centerX > 200) {
             bg1.setSpeedX(-MOVESPEED / 5);
             bg2.setSpeedX(-MOVESPEED / 5);
@@ -75,10 +80,10 @@ public class Mech {
             }
 
 
-        //prevents going beyond x coordinate of 0
         if (centerX + speedX <= 60) {
             centerX = 61;
 
+            //prevents going beyond x coordinate of 0
         }
 //center of the robot for 34 left and 63 top
         rect.setRect(centerX - 34, centerY - 63, 68, 63);
@@ -234,6 +239,8 @@ public class Mech {
     public ArrayList getProjectiles () {
         return projectiles;
     }
+
+
 }
 
 

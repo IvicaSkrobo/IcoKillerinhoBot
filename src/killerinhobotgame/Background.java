@@ -18,8 +18,9 @@ public Background (int x, int y) {
 }
 
     public void update() {
-        //System.out.println("backgroudn update metoda speedx ="+speedX);
+
         bgX +=speedX;
+        setBgX(bgX);
         if(bgX <=-2160){
             bgX+=4320;
         }
@@ -43,13 +44,15 @@ public Background (int x, int y) {
     }
 
     public int getSpeedX() {
-
         return speedX;
 
     }
 
     public void setSpeedX(int speedX) {
+        //System.out.println(speedX);
         this.speedX = speedX;
 
     }
+
+
 }

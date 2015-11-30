@@ -43,7 +43,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
     private Animation anim, hanim;//anim for main character, hanim for helliboys
     private Graphics second;
     private URL base;
-    private static Background bg1, bg2;
+    public static Background bg1, bg2;
 
     private ArrayList<Tile> tilearray = new ArrayList<Tile>();
 
@@ -113,10 +113,10 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
     @Override
     public void start() {
         state = GameState.Running;
-
-
         bg1 = new Background(0, 0);
         bg2 = new Background(2160, 0);
+
+
         mech = new Mech();
 
         // Initialize Tiles
@@ -132,6 +132,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
         hb = new Helliboy(340, 360);
         hb2 = new Helliboy(700, 360);
+
+
         Thread thread = new Thread(this);
 
 
@@ -149,6 +151,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
         BufferedReader reader = new BufferedReader(new FileReader(filename));
         while (true) {
+
+
             String line = reader.readLine();
             // end of lines
             if (line == null) {
@@ -158,6 +162,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
             if (!line.startsWith("!")) {
                 lines.add(line);
                 width = Math.max(width, line.length());
+
             }
         }
 
@@ -170,6 +175,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
                 if (i < line.length()) {
                     char ch = line.charAt(i);
                     Tile t = new Tile(i, j, Character.getNumericValue(ch));
+
                     tilearray.add(t);
                 }
             }
@@ -179,18 +185,23 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
     @Override
     public void stop() {
+
+
         super.stop();
     }
 
     @Override
     public void destroy() {
+
         super.destroy();
     }
 
     @Override
     public void run() {
 
+
         if (state == GameState.Running) while (true) {
+
 
             mech.update();
             if (mech.isJumped()) {
@@ -212,6 +223,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
             updateTiles();
 
             hb.update();
+
             hb2.update();
             bg1.update();
 
@@ -228,9 +240,20 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
             }
 
 
-            if (mech.getCenterY() > 500) {
+            if (mech.getCenterY() > 550 || mech.health == 0) {
+
                 state = GameState.Dead;
+
+                repaint();
+
+                bg1.setBgX(0);
+                bg2.setBgX(2160);
+
+
+                return;
+
             }
+
         }
 
 
@@ -280,12 +303,15 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
             g.setFont(font);
             g.setColor(Color.WHITE);
             g.drawString(Integer.toString(score), 740, 30);
+            g.drawString("Health: ", 50, 30);
+            g.drawString(Integer.toString(mech.health), 200, 30);
 
         } else if (state == GameState.Dead) {
             g.setColor(Color.BLUE);
             g.fillRect(0, 0, 800, 480);
             g.setColor(Color.WHITE);
             g.drawString("GG", 360, 240);
+
         }
 
     }
@@ -349,9 +375,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
                 }
                 break;
             case KeyEvent.VK_ENTER:
-                if (state == GameState.Dead) {
-                    Restart();
-                }
+
+
                 break;
         }
 
@@ -396,21 +421,16 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
         score = 0;
 
-        bg1 = new Background(0, 0);
-        bg2 = new Background(2160, 0);
-        mech = new Mech();
-
-
         tilearray = new ArrayList<Tile>();
 
+
+        animate();
+        repaint();
         start();
 
 
-        System.out.println(score);
-
-
-
     }
+
 
     public static Background getBg1() {
 
@@ -421,9 +441,11 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
         return bg2;
     }
 
+
     public static Mech getMech() {
         return mech;
     }
+
 
 }
 

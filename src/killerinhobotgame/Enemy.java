@@ -17,17 +17,18 @@ public class Enemy {
 
     public int health = 5;
 
-    private int movementSpeed;
 
+    private int movementSpeedx;
+    private int movementSpeedy;
 
     public void update() {
         //System.out.println("helliboy update metoda speedx ="+speedX);
 
         follow();
         centerX += speedX;
-        speedX = bg.getSpeedX() * 5 + movementSpeed;
+        speedX = bg.getSpeedX() * 5 + movementSpeedx;
         r.setBounds(centerX - 25, centerY - 25, 50, 60);
-
+        centerY += movementSpeedy;
         if (r.intersects(Mech.yellowRed)) {
             checkCollision();
         }
@@ -35,23 +36,39 @@ public class Enemy {
 
 
     private void checkCollision() {
-        if (r.intersects(Mech.rect) || r.intersects(Mech.rect2) || r.intersects(Mech.rect3) || r.intersects(Mech.rect4))
-        {
-            System.out.println("collision");
-    }
+        if (r.intersects(Mech.rect) || r.intersects(Mech.rect2) || r.intersects(Mech.rect3) || r.intersects(Mech.rect4)) {
+            if (StartingClass.getMech().health > 0) {
+                centerX += 1000;
 
-}
+                StartingClass.getMech().health -= 1;
+                System.out.println(StartingClass.getMech().health);
+            }
+
+
+        }
+    }
 
     public void follow() {
         if (centerX < -95 || centerX > 810) {
-            movementSpeed = 0;
+            movementSpeedx = 0;
         } else if (Math.abs(mech.getCenterX() - centerX) < 5) {
-            movementSpeed = 0;
+            movementSpeedx = 0;
         } else {
             if (mech.getCenterX() >= centerX) {
-                movementSpeed = 1;
+                movementSpeedx = 1;
             } else {
-                movementSpeed = -1;
+                movementSpeedx = -1;
+            }
+        }
+        if (centerY > 400) {
+            movementSpeedy = 0;
+        } else if (Math.abs(mech.getCenterY() - centerY) < 5) {
+            movementSpeedy = 0;
+        } else {
+            if (mech.getCenterY() >= centerY) {
+                movementSpeedy = 1;
+            } else {
+                movementSpeedy = -1;
             }
         }
     }
